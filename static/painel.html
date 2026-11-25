@@ -1,0 +1,129 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Painel de atendimento</title><style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#1b1f24;--mu:#6b7280;--bd:#dfe3e8;--cl:#d9fdd3;--bt:#fff;--at:#dbeafe;--ac:#0f766e}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--card:#1a1f26;--tx:#e8eaed;--mu:#9aa3ad;--bd:#2c333b;--cl:#14532d;--bt:#262d36;--at:#1e3a5f;--ac:#0d9488}}
+*{box-sizing:border-box}body{margin:0;font:14px system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+main{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:16px;padding:16px;max-width:1200px;margin:auto}
+section{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px}
+h2{margin:0 0 10px;font-size:16px}h3{font-size:14px;margin:14px 0 6px}
+.row{display:flex;gap:6px;margin:6px 0}.row>*{flex:1;min-width:0}.row button{flex:none}
+input,select,button{font:inherit;padding:7px 9px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
+button{background:var(--ac);color:#fff;border:0;cursor:pointer}button.sec{background:none;color:var(--tx);border:1px solid var(--bd)}
+.chat{height:340px;overflow-y:auto;background:var(--bg);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:6px}
+.b{max-width:82%;padding:6px 9px;border-radius:10px;background:var(--bt);white-space:pre-wrap;word-break:break-word}
+.b small{display:block;color:var(--mu);font-size:11px;margin-top:2px}
+.b.cliente{align-self:flex-end;background:var(--cl)}.b.atendente{background:var(--at)}
+.aviso{color:var(--mu);margin:4px 0;min-height:1.2em}
+.cols{display:grid;grid-template-columns:200px 1fr;gap:10px}
+ul{list-style:none;margin:0;padding:0}
+#lista li{padding:8px;border:1px solid var(--bd);border-radius:8px;margin-bottom:6px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+#lista li.on{border-color:var(--ac)}#lista small{color:var(--mu);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{font-size:11px;width:fit-content;padding:1px 7px;border-radius:99px;background:var(--bt);border:1px solid var(--bd)}
+.tag.aguardando{background:#fde68a;color:#000;border-color:#f59e0b}.tag.atendente{background:var(--at)}
+#hand{background:#fef3c7;color:#000;border-radius:8px;padding:8px;margin:6px 0}
+#met{color:var(--mu);margin:6px 0}#lac li{padding:4px 0;border-bottom:1px solid var(--bd)}
+@media(max-width:800px){main,.cols{grid-template-columns:1fr}}
+main{grid-template-columns:1fr;max-width:900px}textarea{font:inherit;padding:7px 9px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}#faqf input,#faqf textarea{width:100%;margin:4px 0}.b a{color:var(--ac);cursor:pointer}#lac li{display:flex;gap:8px;align-items:center;justify-content:space-between}main{grid-template-columns:1fr;max-width:900px}</style></head><body><main>
+<section id="login" style="max-width:380px;margin:40px auto;width:100%">
+  <h2>Acesso ao painel de atendimento</h2>
+  <div class="row"><input id="lCod" placeholder="Código da empresa" autocomplete="off"></div>
+  <div class="row"><input id="lUsr" placeholder="Usuário" autocomplete="off"></div>
+  <div class="row"><input id="lPwd" type="password" placeholder="Senha"></div>
+  <p id="lErr" class="aviso"></p>
+  <div class="row"><button onclick="entrar()">Entrar</button></div>
+</section>
+<section id="app" hidden>
+  <div class="row" style="align-items:center"><h2 id="quem" style="margin:0"></h2><button class="sec" onclick="sair()">Sair</button></div>
+  <div id="met"></div>
+  <div class="cols">
+    <ul id="lista"></ul>
+    <div id="det" hidden>
+      <b id="dh"></b>
+      <div id="hand" hidden></div>
+      <details id="envio" hidden><summary id="envioT"></summary><pre id="envioP" style="overflow:auto;font-size:12px"></pre></details>
+      <div id="dChat" class="chat"></div>
+      <div class="row"><button onclick="acao('assumir')">Assumir</button><button class="sec" onclick="acao('devolver')">Devolver ao bot</button></div>
+      <div class="row"><input id="dMsg" placeholder="Responder ao cliente…"><button onclick="responder()">Enviar</button></div>
+    </div>
+  </div>
+  <p id="toast" class="aviso"></p>
+  <div id="faqf" hidden>
+    <h3>Adicionar resposta automática ao FAQ</h3>
+    <input id="fPer" placeholder="Pergunta (escreva de forma clara)">
+    <textarea id="fVar" rows="2" placeholder="Outras formas de perguntar (uma por linha, opcional)"></textarea>
+    <textarea id="fRes" rows="3" placeholder="Resposta automática"></textarea>
+    <label><input type="checkbox" id="fEnv" style="width:auto"> Enviar também ao cliente agora</label>
+    <div class="row"><button onclick="salvarFaq()">Salvar no FAQ</button><button class="sec" onclick="fecharFaq()">Cancelar</button></div>
+    <p id="fMsg" class="aviso"></p>
+  </div>
+  <h3>Lacunas do FAQ (perguntas que geraram handoff)</h3>
+  <ul id="lac"></ul>
+</section></main><script>
+const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e};
+const rot=m=>m.autor==="cliente"?"Cliente":m.autor==="atendente"?"Atendente"+(m.origem?" "+m.origem:""):"Bot ("+m.origem+")";
+function bolhas(box,msgs,cb){
+  const fim=box.scrollTop+box.clientHeight>=box.scrollHeight-40;
+  box.replaceChildren(...msgs.map(m=>{const d=el("div","b "+m.autor,m.texto||"");const s=el("small",null,rot(m)+" · "+m.hora);
+    if(cb&&m.autor==="cliente"){const a=el("a",null," · ＋ FAQ");a.onclick=()=>cb(m.texto);s.append(a)}
+    d.append(s);return d}));
+  if(fim)box.scrollTop=box.scrollHeight;
+}
+const ST={bot:"Bot",aguardando:"Aguardando humano",atendente:"Com atendente"};
+const lab=c=>c.status==="atendente"&&c.atendente?"Com "+c.atendente:ST[c.status];
+let tok="",sel=null,st=null,es=null,pend=null;
+const api=(p,o={})=>fetch(p,{...o,headers:{"Content-Type":"application/json","X-Token":tok}});
+$("lPwd").onkeydown=e=>{if(e.key==="Enter")entrar()};
+$("dMsg").onkeydown=e=>{if(e.key==="Enter")responder()};
+async function entrar(){
+  const r=await fetch("/painel/login",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({codigo:$("lCod").value,usuario:$("lUsr").value,senha:$("lPwd").value})});
+  if(!r.ok){$("lErr").textContent="Credenciais inválidas.";return}
+  const d=await r.json();tok=d.token;$("lPwd").value="";$("lErr").textContent="";
+  $("login").hidden=true;$("app").hidden=false;$("quem").textContent=d.empresa+" · "+d.usuario;
+  es=new EventSource("/painel/stream?token="+encodeURIComponent(tok));   // o servidor avisa quando algo muda
+  es.onmessage=e=>{st=JSON.parse(e.data);desenhar()};
+  es.onerror=()=>{if(es&&es.readyState===2)sair()};
+}
+async function sair(){
+  if(es)es.close();es=null;await api("/painel/sair",{method:"POST"});
+  tok="";sel=null;fecharFaq();$("app").hidden=true;$("login").hidden=false;
+}
+function desenhar(){
+  const m=st.metricas;
+  $("met").textContent="Respostas: FAQ "+m.faq+" · IA "+m.ia+" · Plano B "+m.fallback+" · Atendente "+m.humano;
+  $("lista").replaceChildren(...st.conversas.map(c=>{
+    const li=el("li",c.cliente===sel?"on":null);
+    li.append(el("b",null,c.cliente),el("span","tag "+c.status,lab(c)),el("small",null,(c.mensagens.at(-1)||{}).texto||""));
+    li.onclick=()=>{sel=c.cliente;desenhar();$("dChat").scrollTop=1e9};return li}));
+  const c=st.conversas.find(x=>x.cliente===sel);
+  $("det").hidden=!c;
+  if(c){$("dh").textContent="Cliente "+c.cliente+" — "+lab(c);
+    $("hand").hidden=!c.handoff;$("hand").textContent=c.handoff?"🙋 Motivo do handoff: "+c.handoff:"";
+    $("envio").hidden=!c.envio;
+    if(c.envio){$("envioT").textContent=c.envio.simulada?"🧪 Simulação: esta venda NÃO foi enviada à RevGás (corpo do POST /sales)":"✅ Venda enviada à RevGás (id "+c.envio.id+")";
+      $("envioP").textContent=JSON.stringify(c.envio.payload,null,2)}
+    bolhas($("dChat"),c.mensagens,t=>abrirFaq(t,c.cliente))}
+  $("lac").replaceChildren(...st.lacunas.map(l=>{
+    const li=el("li",null,l.hora+" · “"+l.pergunta+"”");
+    const b=el("button","sec","Responder automaticamente");b.onclick=()=>abrirFaq(l.pergunta,l.cliente);
+    li.append(b);return li}));
+}
+async function acao(a,texto=""){
+  if(!sel)return;
+  await api("/painel/acao",{method:"POST",body:JSON.stringify({cliente:sel,acao:a,texto})});
+}
+async function responder(){const t=$("dMsg").value.trim();if(!t)return;$("dMsg").value="";acao("responder",t)}
+function abrirFaq(p,cliente){
+  pend={original:p,cliente};$("fPer").value=p;$("fVar").value="";$("fRes").value="";
+  $("fEnv").checked=!!cliente;$("fMsg").textContent="";$("faqf").hidden=false;
+  $("faqf").scrollIntoView({behavior:"smooth"});$("fRes").focus();
+}
+function fecharFaq(){$("faqf").hidden=true;pend=null}
+async function salvarFaq(){
+  const r=await api("/painel/faq",{method:"POST",body:JSON.stringify({pergunta:$("fPer").value,original:pend.original,
+    variacoes:$("fVar").value,resposta:$("fRes").value,cliente:pend.cliente||"",enviar:$("fEnv").checked})});
+  if(!r.ok){$("fMsg").textContent="Preencha a pergunta e a resposta.";return}
+  fecharFaq();$("toast").textContent="FAQ atualizado ✓ Perguntas parecidas, mesmo com erros de digitação, já serão respondidas automaticamente.";
+  setTimeout(()=>$("toast").textContent="",6000);
+}
+</script></body></html>

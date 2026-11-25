@@ -1,0 +1,57 @@
+[
+ {
+  "perguntas": [
+   "qual o horario de funcionamento",
+   "que horas voces abrem",
+   "ate que horas voces atendem",
+   "voces abrem no domingo",
+   "voces abrem aos sabados",
+   "horario de atendimento",
+   "que horas funciona",
+   "ate que horas funciona",
+   "abrem hoje"
+  ],
+  "resposta": "Funcionamos de segunda a sábado, das 8h às 19h. 🐶"
+ },
+ {
+  "perguntas": [
+   "como funciona o banho e tosa",
+   "preciso agendar o banho",
+   "quanto tempo demora o banho",
+   "como agendar banho e tosa"
+  ],
+  "resposta": "O banho e a tosa são por agendamento. Um banho de porte pequeno leva cerca de 1 hora."
+ },
+ {
+  "perguntas": [
+   "voces entregam racao",
+   "qual o prazo de entrega",
+   "demora muito para entregar",
+   "fazem entrega em casa"
+  ],
+  "resposta": "Entregamos rações em até 2 horas nos bairros próximos."
+ },
+ {
+  "perguntas": [
+   "qual a vacina exigida para o banho",
+   "meu pet precisa estar vacinado",
+   "precisa de vacina para banho",
+   "exigem carteira de vacinacao"
+  ],
+  "resposta": "Para o banho, a vacinação precisa estar em dia (V10 e antirrábica)."
+ },
+ {
+  "perguntas": [
+   "quais as formas de pagamento",
+   "voces aceitam pix",
+   "voces aceitam cartao",
+   "posso pagar no cartao",
+   "como posso pagar",
+   "aceitam pix",
+   "aceita pix",
+   "aceitam cartao",
+   "aceita cartao"
+  ],
+  "resposta": "Aceitamos pix, cartão e dinheiro."
+ }
+]

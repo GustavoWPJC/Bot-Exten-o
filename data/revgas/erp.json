@@ -1,0 +1,57 @@
+{
+  "produtos": [
+    {
+      "id": "p13",
+      "nome": "Botijão P13 (13kg)",
+      "preco": 125.0,
+      "estoque": 40
+    },
+    {
+      "id": "p20",
+      "nome": "Botijão P20 (20kg)",
+      "preco": 190.0,
+      "estoque": 8
+    },
+    {
+      "id": "agua20",
+      "nome": "Galão de água 20L",
+      "preco": 14.0,
+      "estoque": 0
+    }
+  ],
+  "pagamentos": [
+    "pix",
+    "dinheiro",
+    "cartão na entrega"
+  ],
+  "pedidos": [
+    {
+      "id": 1001,
+      "cliente": "Maria",
+      "itens": "1x Botijão P13 (13kg)",
+      "status": "em rota",
+      "eta_min": 5
+    },
+    {
+      "id": 1002,
+      "cliente": "João",
+      "itens": "2x Botijão P13 (13kg)",
+      "status": "entregue",
+      "eta_min": 0
+    }
+  ],
+  "clientes": [
+    {
+      "telefone": "5586955554444",
+      "nome": "Carlos",
+      "endereco": {
+        "rua": "Avenida Joaquim Nelson",
+        "numero": "48",
+        "bairro": "Redonda",
+        "cidade": "Teresina",
+        "estado": "PI",
+        "complemento": ""
+      }
+    }
+  ]
+}

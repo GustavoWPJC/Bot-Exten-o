@@ -1,0 +1,66 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Simulador do cliente</title><style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#1b1f24;--mu:#6b7280;--bd:#dfe3e8;--cl:#d9fdd3;--bt:#fff;--at:#dbeafe;--ac:#0f766e}
+@media(prefers-color-scheme:dark){:root{--bg:#111418;--card:#1a1f26;--tx:#e8eaed;--mu:#9aa3ad;--bd:#2c333b;--cl:#14532d;--bt:#262d36;--at:#1e3a5f;--ac:#0d9488}}
+*{box-sizing:border-box}body{margin:0;font:14px system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+main{display:grid;grid-template-columns:minmax(300px,380px) 1fr;gap:16px;padding:16px;max-width:1200px;margin:auto}
+section{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px}
+h2{margin:0 0 10px;font-size:16px}h3{font-size:14px;margin:14px 0 6px}
+.row{display:flex;gap:6px;margin:6px 0}.row>*{flex:1;min-width:0}.row button{flex:none}
+input,select,button{font:inherit;padding:7px 9px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}
+button{background:var(--ac);color:#fff;border:0;cursor:pointer}button.sec{background:none;color:var(--tx);border:1px solid var(--bd)}
+.chat{height:340px;overflow-y:auto;background:var(--bg);border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:6px}
+.b{max-width:82%;padding:6px 9px;border-radius:10px;background:var(--bt);white-space:pre-wrap;word-break:break-word}
+.b small{display:block;color:var(--mu);font-size:11px;margin-top:2px}
+.b.cliente{align-self:flex-end;background:var(--cl)}.b.atendente{background:var(--at)}
+.aviso{color:var(--mu);margin:4px 0;min-height:1.2em}
+.cols{display:grid;grid-template-columns:200px 1fr;gap:10px}
+ul{list-style:none;margin:0;padding:0}
+#lista li{padding:8px;border:1px solid var(--bd);border-radius:8px;margin-bottom:6px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+#lista li.on{border-color:var(--ac)}#lista small{color:var(--mu);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tag{font-size:11px;width:fit-content;padding:1px 7px;border-radius:99px;background:var(--bt);border:1px solid var(--bd)}
+.tag.aguardando{background:#fde68a;color:#000;border-color:#f59e0b}.tag.atendente{background:var(--at)}
+#hand{background:#fef3c7;color:#000;border-radius:8px;padding:8px;margin:6px 0}
+#met{color:var(--mu);margin:6px 0}#lac li{padding:4px 0;border-bottom:1px solid var(--bd)}
+@media(max-width:800px){main,.cols{grid-template-columns:1fr}}
+main{grid-template-columns:1fr;max-width:900px}textarea{font:inherit;padding:7px 9px;border:1px solid var(--bd);border-radius:8px;background:var(--card);color:var(--tx)}#faqf input,#faqf textarea{width:100%;margin:4px 0}.b a{color:var(--ac);cursor:pointer}#lac li{display:flex;gap:8px;align-items:center;justify-content:space-between}main{grid-template-columns:minmax(300px,420px);justify-content:center}</style></head><body><main><section>
+  <h2>📱 Simulador do cliente (WhatsApp)</h2>
+  <p class="aviso">Ferramenta de demonstração: no uso real o cliente conversa pelo WhatsApp.</p>
+  <div class="row"><select id="cEmp"></select></div>
+  <div class="row"><input id="cNum" value="5586988887777" aria-label="Número do cliente"></div>
+  <div id="cChat" class="chat"></div>
+  <p id="cSt" class="aviso"></p>
+  <div class="row"><input id="cMsg" placeholder="Digite uma mensagem…"><button onclick="enviar()">Enviar</button></div>
+</section></main><script>
+const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!==undefined)e.textContent=x;return e};
+const rot=m=>m.autor==="cliente"?"Cliente":m.autor==="atendente"?"Atendente"+(m.origem?" "+m.origem:""):"Bot ("+m.origem+")";
+function bolhas(box,msgs,cb){
+  const fim=box.scrollTop+box.clientHeight>=box.scrollHeight-40;
+  box.replaceChildren(...msgs.map(m=>{const d=el("div","b "+m.autor,m.texto||"");const s=el("small",null,rot(m)+" · "+m.hora);
+    if(cb&&m.autor==="cliente"){const a=el("a",null," · ＋ FAQ");a.onclick=()=>cb(m.texto);s.append(a)}
+    d.append(s);return d}));
+  if(fim)box.scrollTop=box.scrollHeight;
+}
+let es=null;
+function abrir(){
+  if(es)es.close();
+  const n=$("cEmp").value,c=$("cNum").value.trim();if(!n||!c)return;
+  es=new EventSource("/chat/"+n+"/"+encodeURIComponent(c)+"/stream");   // o servidor avisa quando algo muda
+  es.onmessage=e=>{const r=JSON.parse(e.data);bolhas($("cChat"),r.mensagens);
+    $("cSt").textContent=r.status==="bot"?"":"Um atendente foi acionado…"};
+}
+async function init(){
+  const C=await (await fetch("/simulador/contatos")).json();
+  C.forEach(c=>$("cEmp").add(new Option(c.nome+" ("+c.numero+")",c.numero)));
+  $("cEmp").onchange=abrir;$("cNum").onchange=abrir;
+  $("cMsg").onkeydown=e=>{if(e.key==="Enter")enviar()};
+  abrir();
+}
+async function enviar(){
+  const m=$("cMsg").value.trim();if(!m)return;$("cMsg").value="";
+  const r=await fetch("/chat",{method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({numero_empresa:$("cEmp").value,numero_cliente:$("cNum").value.trim(),mensagem:m})});
+  if(!r.ok)alert("Erro: "+(await r.json()).detail);
+}
+init();
+</script></body></html>

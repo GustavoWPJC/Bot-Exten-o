@@ -1,0 +1,78 @@
+[
+ {
+  "perguntas": [
+   "qual o horario de funcionamento",
+   "que horas voces abrem",
+   "ate que horas voces atendem",
+   "que horas voces fecham",
+   "voces abrem no domingo",
+   "voces funcionam no fim de semana",
+   "horario de atendimento",
+   "que horas funciona",
+   "ate que horas funciona",
+   "funcionam hoje",
+   "abrem hoje"
+  ],
+  "resposta": "Atendemos todos os dias, das 7h às 22h. 😊"
+ },
+ {
+  "perguntas": [
+   "quanto tempo demora a entrega",
+   "qual o prazo de entrega",
+   "demora muito para entregar",
+   "em quanto tempo chega o gas",
+   "quanto tempo para chegar"
+  ],
+  "resposta": "A entrega leva em média 20 minutos dentro da nossa área de cobertura."
+ },
+ {
+  "perguntas": [
+   "quais as formas de pagamento",
+   "voces aceitam pix",
+   "voces aceitam cartao",
+   "posso pagar no cartao",
+   "aceita dinheiro",
+   "como posso pagar",
+   "aceitam pix",
+   "aceita pix",
+   "aceitam cartao",
+   "aceita cartao",
+   "pagamento no pix"
+  ],
+  "resposta": "Aceitamos pix, dinheiro e cartão na entrega. Se for pagar em dinheiro, é só avisar se precisa de troco."
+ },
+ {
+  "perguntas": [
+   "como funciona a troca do botijao",
+   "preciso entregar o botijao vazio",
+   "o entregador leva o botijao vazio",
+   "como funciona a troca do vasilhame"
+  ],
+  "resposta": "O entregador leva o botijão cheio e recolhe o vazio na hora."
+ },
+ {
+  "perguntas": [
+   "qual a area de cobertura",
+   "voces entregam no meu bairro",
+   "voces entregam na zona rural",
+   "quais bairros voces atendem",
+   "voces entregam em toda a cidade"
+  ],
+  "resposta": "Atendemos todos os bairros da zona urbana. Para zona rural, é só pedir para falar com um atendente."
+ },
+ {
+  "perguntas": [
+   "estou sentindo cheiro de gas",
+   "cheiro de gas o que fazer",
+   "vazamento de gas o que fazer",
+   "meu botijao esta vazando"
+  ],
+  "resposta": "⚠️ Abra portas e janelas, NÃO acione interruptores nem acenda fogo, feche o registro do botijão e ligue 193 (Bombeiros). Se quiser, também chamo um atendente."
+ },
+ {
+  "perguntas": [
+   "quero saber se o lucas trabalha ai"
+  ],
+  "resposta": "Resposta Teste"
+ }
+]

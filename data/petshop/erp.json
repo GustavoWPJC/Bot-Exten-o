@@ -1,0 +1,11 @@
+{
+  "produtos": [
+    {"id": "racao10", "nome": "Ração cães adultos 10kg", "preco": 159.9, "estoque": 20},
+    {"id": "racaogato", "nome": "Ração gatos castrados 3kg", "preco": 74.9, "estoque": 12},
+    {"id": "banho", "nome": "Banho (porte pequeno)", "preco": 50.0, "estoque": 99}
+  ],
+  "pagamentos": ["pix", "cartão", "dinheiro"],
+  "pedidos": [
+    {"id": 2001, "cliente": "Ana", "itens": "1x Ração cães adultos 10kg", "status": "separando", "eta_min": 40}
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "location": "Rua das dores",
+  "number": "99",
+  "neighborhood": "joquei",
+  "city": "teresina",
+  "state_federation": "PI",
+  "complement": "apartamento",
+  "observation": "Pedido via assistente virtual (WhatsApp). Cliente: gustavo wilson. Telefone: +5586988887777.",
+  "establishment_id": 2580,
+  "products": [
+    {
+      "product_id": 26717,
+      "quantity": 1,
+      "value": 125.0
+    }
+  ],
+  "payments": [
+    {
+      "payment_type": "PIX",
+      "value": 125.0,
+      "date": "2026-11-25"
+    }
+  ],
+  "channel": "WHATSAPP",
+  "origin": "INTEGRATION",
+  "option": "NORMAL",
+  "broadcast": "NEW_SALE"
+}

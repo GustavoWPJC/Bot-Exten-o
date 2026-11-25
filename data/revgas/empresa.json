@@ -1,0 +1,39 @@
+{
+  "nome": "RevGás",
+  "segmento": "distribuidora de gás de cozinha (GLP) com entrega rápida",
+  "tom": "simpático, objetivo e informal, mensagens curtas",
+  "regras": [
+    "Nunca ofereça desconto nem altere preços.",
+    "Para fechar um pedido, colete: nome, produto, quantidade, endereço e forma de pagamento.",
+    "Confirme os dados com o cliente antes de criar o pedido.",
+    "Se houver cheiro de gás ou vazamento, oriente a abrir janelas, não acionar interruptores e ligar para os bombeiros (193); depois transfira para um humano."
+  ],
+  "codigo_acesso": "revgas",
+  "usuarios": [
+    {
+      "login": "maria",
+      "nome": "Maria",
+      "senha": "maria123"
+    },
+    {
+      "login": "joao",
+      "nome": "João",
+      "senha": "joao123"
+    }
+  ],
+  "erp": {
+    "tipo": "revgas",
+    "establishment_id": 2580,
+    "token_env": "REVGAS_API_TOKEN",
+    "modo_env": "REVGAS_MODO"
+  },
+  "precos": {
+    "26717": 125.0
+  },
+  "pagamentos": [
+    "pix",
+    "dinheiro",
+    "cartão de débito",
+    "cartão de crédito"
+  ]
+}
